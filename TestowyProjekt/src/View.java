@@ -22,8 +22,8 @@ public class View extends JFrame{
 
 
         mainPanel = new JPanel(new GridLayout(4, 1));
-        singleplayerButton = new JButton("Singleplayer");
-        multiplayerButton = new JButton("Multiplayer");
+        singleplayerButton = new JButton("Create Multilpayer Game");
+        multiplayerButton = new JButton("Join Multiplayer Game");
 //        exitButton = new JButton("Quit");
         mainPanel.add(singleplayerButton);
         mainPanel.add(multiplayerButton);

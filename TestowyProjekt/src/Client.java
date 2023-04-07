@@ -15,24 +15,38 @@ public class Client {
         out = new PrintWriter(socket.getOutputStream(), true);
     }
 
-    public void start() {
-        Thread thread = new Thread(() -> {
-            try {
-                while (true) {
-                    String message = in.readLine();
-                    if (message == null) {
-                        break;
-                    }
-                    System.out.println(message);
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });
-        thread.start();
-    }
-
+//    public void start() {
+//        Thread thread = new Thread(() -> {
+//            try {
+//                while (true) {
+//                    String message = in.readLine();
+//                    if (message == null) {
+//                        break;
+//                    }
+//                    System.out.println(message);
+//                }
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//        });
+//        thread.start();
+//    }
+//
     public void sendMessage(String message) {
         out.println(message);
+    }
+    public String waitForMessage() {
+        try {
+            while (true) {
+                String message = in.readLine();
+                if (message == null) {
+                    break;
+                }
+                return message;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return "Problem";
     }
 }

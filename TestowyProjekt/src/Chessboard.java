@@ -24,20 +24,15 @@ public class Chessboard {
             }
             isWhite=!(isWhite);
         }
-        System.out.println(chessboard);
-
     }
 
 
     void setPieceOnSquare(String position, Piece piece)
     {
         int x,y;
-        System.out.println("Trying to set new piece");
         x=chessboard.get(position).X;
         y=chessboard.get(position).Y;
-        System.out.println(position + x + y);
 
-        System.out.println(chessboard.get(position));
         piece.setOnBoard(x,y);
         piece.actual_position=position;
         chessboard.get(position).piece=piece;

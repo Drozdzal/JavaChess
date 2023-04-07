@@ -12,7 +12,10 @@ public class ClientHandler extends Thread {
         this.incomingSocket = incomingSocket;
         this.outgoingSocket = outgoingSocket;
     }
-
+    public String waitForMessage() throws IOException {
+        BufferedReader in = new BufferedReader(new InputStreamReader(incomingSocket.getInputStream()));
+        return in.readLine();
+    }
     public void run() {
         try {
             BufferedReader in = new BufferedReader(new InputStreamReader(incomingSocket.getInputStream()));
