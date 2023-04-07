@@ -1,5 +1,6 @@
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 
 public class King extends Piece{
     public King(boolean isWhite)
@@ -17,7 +18,9 @@ public class King extends Piece{
     }
 
     @Override
-    public void movesPossible() {
+    public void getPossibleMoves() {
+//        ArrayList<String> possible_moves = new ArrayList<String>();
+//        return possible_moves;
         //
     }
 }

@@ -12,13 +12,17 @@ public class Square extends JLabel{
     int height = 75;
     boolean occupied = false;
     Piece piece;
-
+    public void setOccupied(boolean occupied)
+    {
+        this.occupied=occupied;
+    }
 
     Square(boolean isWhite, int xp, int yp) {
         this.X=xp;
         this.Y=yp;
 
         this.setBounds(X, Y, width, height);
+        this.setPreferredSize(new Dimension(width,height));
         if (isWhite) {
             this.setBackground(Color.GRAY);
         }
@@ -26,7 +30,6 @@ public class Square extends JLabel{
             this.setBackground(Color.white);
         }
         this.setOpaque(true);
-//        this.addMouseListener(this);
         this.setVisible(true);
     }
 
