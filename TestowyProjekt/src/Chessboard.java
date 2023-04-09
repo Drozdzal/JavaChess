@@ -18,6 +18,7 @@ public class Chessboard {
             for (int column = 0; column < 8; column += 1) {
                 square = new Square(isWhite, boardColumnOffset+sizeOfSquare*column, boardRowOffset+sizeOfSquare*row);
                 square_id=""+(char)(65+column)+(row+1);
+                square.setId(square_id);
                 chessboard.put(square_id,square);
                 isWhite=!(isWhite);
 //

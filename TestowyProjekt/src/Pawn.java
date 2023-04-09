@@ -39,6 +39,7 @@ public class Pawn extends Piece{
         if (!isSquareOccupied(possible_position)) {
             allMoves.add(possible_position);
         }
+
         possible_position = "" + column + (char) ((int) row - 2*goForward);
 
 
@@ -53,11 +54,17 @@ public class Pawn extends Piece{
         {
             allMoves.add(possible_position);
         }
+        else{
+            System.out.println("possition not occupied"+possible_position);
+        }
 
         possible_position=""+(char)((int)(column)+1) + (char)(row-1*goForward);
         if (isSquareOccupied(possible_position))
         {
             allMoves.add(possible_position);
+        }
+        else{
+            System.out.println("possition not occupied"+possible_position);
         }
         System.out.println("Possible moves");
         System.out.println(allMoves);

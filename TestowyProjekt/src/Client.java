@@ -42,6 +42,7 @@ public class Client {
                 if (message == null) {
                     break;
                 }
+                System.out.println("RECEIVED MESSAGE FROM OPPONENT"+message);
                 return message;
             }
         } catch (IOException e) {

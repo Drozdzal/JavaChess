@@ -11,6 +11,7 @@ public class Square extends JLabel{
     int width = 75;
     int height = 75;
     boolean occupied = false;
+    String id;
     Piece piece;
     public void setOccupied(boolean occupied)
     {
@@ -29,8 +30,18 @@ public class Square extends JLabel{
         else{
             this.setBackground(Color.white);
         }
+
         this.setOpaque(true);
         this.setVisible(true);
+
+    }
+
+    public void setId(String id)
+    {
+        this.id=id;
+        this.setText(id);
+        this.setHorizontalAlignment(SwingConstants.CENTER);
+
     }
 
 

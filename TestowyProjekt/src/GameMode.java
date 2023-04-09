@@ -1,7 +1,7 @@
 import java.io.IOException;
 import java.io.SyncFailedException;
 
-public class GameMode {
+public class  GameMode {
 
     protected Player activePlayer;
     private boolean waitingForMessage=false;
@@ -67,8 +67,12 @@ public class GameMode {
         String primary_square;
         primary_square = "" + getColumn(X) + getRow(Y);
         Piece picked_piece;
+        //gdy pole które nacisnelismy okupuje figura
         if (board.chessboard.get(primary_square).occupied) {
+            // jesli figure chce podniesc gracz do ktorego figura nalezy
             if (activePlayer.isWhite == board.chessboard.get(primary_square).piece.isWhite) {
+                //jesli nie ma mata
+
                 picked_piece = board.chessboard.get(primary_square).piece;
                 return picked_piece;
             }
@@ -78,30 +82,65 @@ public class GameMode {
         return null;
     }
 
+    boolean isMate()
+    {
+//        Piece kingPiece = new King(false);
+        Piece kingPiece = null;
+        for (Piece piece: Piece.all_pieces) {
+            if ((piece instanceof King) && (activePlayer.isWhite==piece.isWhite)) {
+                kingPiece = piece;
+                System.out.println("Znaleziono krola na");
+                System.out.println(kingPiece.actual_position);
+            }
+        }
+        String kingPosition = kingPiece.actual_position;
+        for(Piece piece: Piece.all_pieces)
+        {
+            if (piece.isWhite!=kingPiece.isWhite)
+            {
+                piece.getPossibleMoves();
+                if (piece.movePossible(kingPiece.actual_position)){
+                    return true;
+                }
 
+            }
+        }
+        return false;
+    }
     boolean executeMove(Piece piece, int X,int Y){
 
         String desiredSquare;
         desiredSquare= "" + getColumn(X) + getRow(Y);
+        String previousSquare=piece.actual_position;
 
         piece.getPossibleMoves();
         System.out.println(piece.allMoves);
         System.out.println(desiredSquare);
         if (piece.movePossible(desiredSquare))
         {
-            client.sendMessage(piece.actual_position+""+desiredSquare);
-
+            piece.firstMove=false;
             if (board.chessboard.get(desiredSquare).occupied)
             {
-                attackPiece(piece,desiredSquare);
-                switchTurn();
-                return true;
+                boolean moveResult= attackPiece(piece,desiredSquare);
+                if (moveResult)
+                {
+//                    client.sendMessage(previousSquare+""+desiredSquare);
+
+
+                    switchTurn();
+                }
+                return moveResult;
             }
-        else
+            else
             {
-                movePiece(piece,desiredSquare);
-                switchTurn();
-                return true;
+                boolean moveResult= movePiece(piece,desiredSquare);
+                if (moveResult)
+                {
+//                    client.sendMessage(previousSquare+""+desiredSquare);
+
+                    switchTurn();
+                }
+                return moveResult;
             }
         }
         else{
@@ -111,62 +150,99 @@ public class GameMode {
     }
 
     void opponentMove(Piece piece, String to){
-        
-        piece.getPossibleMoves();
-        System.out.println(piece.allMoves);
-        System.out.println(to);
-        
-        if (piece.movePossible(to))
-        {
+
+//        piece.getPossibleMoves();
+        System.out.println("RECEIVED piece WHICH WAS ON"+piece.actual_position);
+        System.out.println("Figura moze sie poruszac do:");
+//        System.out.println(piece.allMoves);
+//        System.out.println(to);
+        String primarySquare = piece.actual_position;
+
+
+        //TODO: TUTAJ SIE PRZYJRZEC BO PROBLEM Z MATEM
+//        if (piece.movePossible(to))
+//        {
 
             if (board.chessboard.get(to).occupied)
             {
-                attackPiece(piece,to);
+                piece.setLocation(board.chessboard.get(to).getX(),board.chessboard.get(to).getY());
+                pieceToRemove = board.chessboard.get(to).piece;
+                Piece.all_pieces.remove(board.chessboard.get(to).piece);
+                board.chessboard.get(to).piece = null;
+                board.chessboard.get(primarySquare).piece=null;
+                board.chessboard.get(primarySquare).setOccupied(false);
+                board.chessboard.get(to).piece = piece;
+                board.chessboard.get(to).setOccupied(true);
+
             }
             else
             {
-                movePiece(piece,to);
+                piece.setLocation(board.chessboard.get(to).getX(),board.chessboard.get(to).getY());
+                board.chessboard.get(primarySquare).piece=null;
+                board.chessboard.get(primarySquare).setOccupied(false);
+                board.chessboard.get(to).piece = piece;
+                board.chessboard.get(to).setOccupied(true);
+
             }
+            System.out.println("CHESSBOARD AT SECOND POSSITION");
+            System.out.println(board.chessboard.get(to).occupied);
+
+
         }
-    }
-    void attackPiece(Piece piece, String to)
+//    }
+    boolean attackPiece(Piece piece, String to)
     {
         String primarySquare = piece.actual_position;
-        piece.setLocation(board.chessboard.get(to).getX(),board.chessboard.get(to).getY());
         piece.actual_position=to;
-        pieceToRemove=board.chessboard.get(to).piece;
-        board.chessboard.get(to).piece = null;
-        Piece.all_pieces.remove(board.chessboard.get(to).piece);
-        board.chessboard.get(primarySquare).piece=null;
-        board.chessboard.get(primarySquare).setOccupied(false);
-        board.chessboard.get(to).piece = piece;
-        board.chessboard.get(to).setOccupied(true);
+
+        if (!isMate())
+        {
+            piece.setLocation(board.chessboard.get(to).getX(),board.chessboard.get(to).getY());
+
+            pieceToRemove = board.chessboard.get(to).piece;
+            board.chessboard.get(to).piece = null;
+            Piece.all_pieces.remove(board.chessboard.get(to).piece);
+            board.chessboard.get(primarySquare).piece = null;
+            board.chessboard.get(primarySquare).setOccupied(false);
+            board.chessboard.get(to).piece = piece;
+            board.chessboard.get(to).setOccupied(true);
+            return true;
+        }
+        System.out.println("MATEEEEE");
+        return false;
     }
 
-    void movePiece(Piece piece,String to)
+    boolean movePiece(Piece piece,String to)
     {
         String primarySquare = piece.actual_position;
-        piece.setLocation(board.chessboard.get(to).getX(),board.chessboard.get(to).getY());
         piece.actual_position=to;
+        if (!isMate())
+        {
+            piece.setLocation(board.chessboard.get(to).getX(),board.chessboard.get(to).getY());
         board.chessboard.get(primarySquare).piece=null;
         board.chessboard.get(primarySquare).setOccupied(false);
         board.chessboard.get(to).piece = piece;
         board.chessboard.get(to).setOccupied(true);
+            return true;
+        }
+        System.out.println("MATEEEEE");
+        return false;
 
 
 
     }
     void switchTurn()
     {
-        System.out.println("Waiting for oponent move");
-        String message=client.waitForMessage();
-        String from="" + message.charAt(0) + message.charAt(1);
-        System.out.println("Picking piece from"+from);
-        String to="" + message.charAt(2) + message.charAt(3);
-        System.out.println("Picking piece to"+to);
-        Piece choosen_piece=Chessboard.chessboard.get(from).piece;
-        opponentMove(choosen_piece, to);
-        System.out.println("Move executed");
+//        System.out.println("Waiting for oponent move");
+//        String message=client.waitForMessage();
+//        String from="" + message.charAt(0) + message.charAt(1);
+//        System.out.println("Picking piece from"+from);
+//        String to="" + message.charAt(2) + message.charAt(3);
+//        System.out.println("Picking piece to"+to);
+//        Piece choosen_piece=Chessboard.chessboard.get(from).piece;
+//        opponentMove(choosen_piece, to);
+//        System.out.println("Move executed");
+        activePlayer.isWhite=!activePlayer.isWhite;
     }
 }
 

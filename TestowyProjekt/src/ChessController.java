@@ -71,6 +71,21 @@ public class ChessController implements MouseListener,MouseMotionListener,Action
 
 
         }
+        else if (e.getSource() == view.exitButton) {
+            view.mainPanel.setVisible(false);
+            view.setLayout(null);
+            view.setPreferredSize(new Dimension(1000,1000));
+            view.singleplayer.setVisible(true);
+            view.displayChessboard(model.board.chessboard);
+            view.displayPieces(Piece.all_pieces);
+            view.repaint();
+            model.gameMode.setPlayer("Ewa",false);
+            model.gameMode.gameStart();
+
+
+        }
+
+
     }
     @Override
     public void mousePressed(MouseEvent e) {
@@ -90,6 +105,7 @@ public class ChessController implements MouseListener,MouseMotionListener,Action
                 if (model.gameMode.pieceToRemove!=null)
                 {
                     view.remove(model.gameMode.pieceToRemove);;
+//                    view.resetPieces();
                     model.gameMode.pieceToRemove=null;
                 }
             }

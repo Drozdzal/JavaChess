@@ -6,23 +6,6 @@ import java.awt.event.MouseMotionListener;
 import java.util.ArrayList;
 
 
-//public abstract Piece extends JLabel implements MouseListener{
-//    ImageIcon simple;
-//
-//    Piece() {
-//        this.setOpaque(true);
-//        this.addMouseListener(this);
-//        this.setVisible(true);
-//
-//        simple= new ImageIcon("bialy_skoczek.png");
-//        this.setIcon(simple);
-//        this.setBounds(0, 0, 200, 200);
-//        this.addMouseListener(this);
-//
-//    }
-//
-//
-//}
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
@@ -57,10 +40,8 @@ public abstract class Piece extends JLabel{
             getPossibleMoves();
         }
         if (allMoves.contains(desiredSquare)) {
-            System.out.println("Ruch zawira sie w dziedzinie");
             return true;
         } else {
-            System.out.println("Ruch nie zawira sie w dziedzinie");
 
             return false;
         }
@@ -68,10 +49,9 @@ public abstract class Piece extends JLabel{
     public boolean isSquareOccupied(String possible_position)
     {
         int pieces_through = 0;
-        while (this.all_pieces.size() > pieces_through) {
+        while (Piece.all_pieces.size() > pieces_through) {
             if(possible_position.equals(all_pieces.get(pieces_through).actual_position))
             {
-                System.out.println("Pole nie jest zajete");
                 return true;
             }
 
@@ -84,11 +64,10 @@ public abstract class Piece extends JLabel{
     public boolean isSquareOccupiedByAlly(String possible_position)
     {
         int pieces_through = 0;
-        while (this.all_pieces.size() > pieces_through) {
+        while (Piece.all_pieces.size() > pieces_through) {
             if(possible_position.equals(all_pieces.get(pieces_through).actual_position))
             {
                 if(all_pieces.get(pieces_through).isWhite==this.isWhite) {
-                    System.out.println("Pole nie jest zajete przez sojusznika");
                     return true;
                 }
                 else {
