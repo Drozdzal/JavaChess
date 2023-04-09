@@ -1,6 +1,6 @@
 import java.io.IOException;
 import java.io.SyncFailedException;
-
+import javax.swing.JOptionPane;
 public abstract class  GameMode {
 
     public Player activePlayer;
@@ -194,10 +194,23 @@ public abstract class  GameMode {
             return true;
         }
         else{
-            piece.actual_position=primarySquare;
+            int choice = JOptionPane.showOptionDialog(null, "There is mate do you want to surrender?",
+                    "Options", JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, new String[] {"Don't surrender", "Surrender"}, null);
 
+            if (choice == JOptionPane.YES_OPTION) {
+                System.out.println("Dont surrender");
+            } else if (choice == JOptionPane.NO_OPTION) {
+                System.out.println("Surrender");
+                int second_choice = JOptionPane.showConfirmDialog(null, "You've lost. Do you want to quit?", "Game Over",
+                        JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
+                client.sendMessage("YOU WON");
+                if (choice == JOptionPane.OK_OPTION) {
+                    System.exit(0); // exit the application
+                }
+
+            }
         }
-        System.out.println("MATEEEEE");
+        piece.actual_position=primarySquare;
         return false;
     }
 
@@ -215,9 +228,23 @@ public abstract class  GameMode {
             return true;
         }
         else{
-            piece.actual_position=primarySquare;
+            int choice = JOptionPane.showOptionDialog(null, "There is mate do you want to surrender?",
+                    "Options", JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, new String[] {"Don't surrender", "Surrender"}, null);
+
+            if (choice == JOptionPane.YES_OPTION) {
+                System.out.println("Dont surrender");
+            } else if (choice == JOptionPane.NO_OPTION) {
+                System.out.println("Surrender");
+                int second_choice = JOptionPane.showConfirmDialog(null, "You've lost. Do you want to quit?", "Game Over",
+                        JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
+                client.sendMessage("YOU WON");
+                if (choice == JOptionPane.OK_OPTION) {
+                    System.exit(0); // exit the application
+                }
+
+            }
         }
-        System.out.println("MATEEEEE");
+        piece.actual_position=primarySquare;
         return false;
     }
 

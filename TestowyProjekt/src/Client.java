@@ -3,6 +3,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import javax.swing.JOptionPane;
 
 public class Client {
     private Socket socket;
@@ -26,6 +27,14 @@ public class Client {
 //                if (message == null) {
 //                    break;
 //                }
+                if (message.equals("YOU WON"))
+                {
+                    int choice = JOptionPane.showConfirmDialog(null, "You've WON. Do you want to quit?", "Game Over", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
+
+                    if (choice == JOptionPane.OK_OPTION) {
+                        System.exit(0); // exit the application
+                    }
+                }
                 System.out.println("RECEIVED MESSAGE FROM OPPONENT"+message);
                 return message;
 //            }

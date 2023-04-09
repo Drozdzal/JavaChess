@@ -99,13 +99,15 @@ public class ChessController implements MouseListener,MouseMotionListener,Action
     }
     @Override
     public void mousePressed(MouseEvent e) {
-        if (model.gameMode.pieceToRemove!=null)
-        {
-            view.remove(model.gameMode.pieceToRemove);
-            Piece.all_pieces.remove(model.gameMode.pieceToRemove);
-            model.gameMode.pieceToRemove=null;
-            picked_piece=null;
-        }
+//        if (model.gameMode.pieceToRemove!=null)
+//        {
+////            view.remove(model.gameMode.pieceToRemove);
+////            Piece.all_pieces.remove(model.gameMode.pieceToRemove);
+////            model.gameMode.pieceToRemove=null;
+////            picked_piece=null;
+//            view.resetPieces();
+//
+//        }
         if (picked_piece==null){
 
             picked_piece=model.gameMode.canPickPiece(e.getX(),e.getY());
@@ -140,6 +142,15 @@ public class ChessController implements MouseListener,MouseMotionListener,Action
                     picked_piece=null;
                 }
                 model.gameMode.switchTurn();
+
+                if (model.gameMode.pieceToRemove!=null)
+                {
+
+                    view.remove(model.gameMode.pieceToRemove);
+                    Piece.all_pieces.remove(model.gameMode.pieceToRemove);
+                    model.gameMode.pieceToRemove=null;
+                    picked_piece=null;
+                }
             }
             else
             {
@@ -153,6 +164,7 @@ public class ChessController implements MouseListener,MouseMotionListener,Action
 
             }
         }
+
     }
 
     @Override
@@ -193,12 +205,6 @@ public class ChessController implements MouseListener,MouseMotionListener,Action
 
     @Override
     public void mouseMoved(MouseEvent e) {
-        if (model.gameMode.pieceToRemove!=null)
-        {
-            view.remove(model.gameMode.pieceToRemove);
-            Piece.all_pieces.remove(model.gameMode.pieceToRemove);
-            model.gameMode.pieceToRemove=null;
-        }
 
 
     }
