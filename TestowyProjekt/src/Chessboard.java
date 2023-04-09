@@ -95,7 +95,18 @@ public class Chessboard {
 
 
     }
-//
+
+    @Override
+    public String toString() {
+        StringBuilder dupa = new StringBuilder();
+
+        chessboard.forEach((x, y) -> {
+            dupa.append(x).append(":").append(y).append("\n");
+        });
+        return dupa.toString();
+    }
+
+    //
 //    void setPieceOnSquare(String position, Piece piece)
 //    {
 //        int x,y;

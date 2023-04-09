@@ -111,6 +111,11 @@ public abstract class  GameMode {
         previousSquare=piece.actual_position;
         desiredSquare= "" + getColumn(X) + getRow(Y);
 
+        System.out.println("-------\n\n\n\n");
+        System.out.println("my board");
+        System.out.println(this.board);
+
+        System.out.println("-------\n\n\n\n");
 
         piece.getPossibleMoves();
         System.out.println("All moves possible " +piece.allMoves);
@@ -139,9 +144,16 @@ public abstract class  GameMode {
 
     void opponentMove(Piece piece, String to){
 
+        System.out.println("-------\n\n\n\n");
+        System.out.println("opponent board");
+        System.out.println(this.board);
+
+        System.out.println("-------\n\n\n\n");
+
+
         piece.getPossibleMoves();
-        System.out.println("RECEIVED piece WHICH WAS ON"+piece.actual_position);
-        System.out.println("Figura moze sie poruszac do:");
+//        System.out.println("RECEIVED piece WHICH WAS ON"+piece.actual_position);
+//        System.out.println("Figura moze sie poruszac do:");
         String primarySquare = piece.actual_position;
 
 

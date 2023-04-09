@@ -81,7 +81,11 @@ public abstract class Piece extends JLabel{
 
     }
 
-
-
-
+    @Override
+    public String toString() {
+        return "Piece{" +
+                "file_path='" + file_path + '\'' +
+                ", actual_position='" + actual_position + '\'' +
+                '}';
+    }
 }

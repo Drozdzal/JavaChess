@@ -44,8 +44,10 @@ public class Square extends JLabel{
 
     }
 
-
-
-
-
+    @Override
+    public String toString() {
+        return "Square{" +
+                "piece=" + piece +
+                '}';
+    }
 }
