@@ -143,11 +143,13 @@ public abstract class  GameMode {
         System.out.println("RECEIVED piece WHICH WAS ON"+piece.actual_position);
         System.out.println("Figura moze sie poruszac do:");
         String primarySquare = piece.actual_position;
+        piece.actual_position=to;
 
 
 
 
-            if (board.chessboard.get(to).occupied)
+
+        if (board.chessboard.get(to).occupied)
             {
                 piece.setLocation(board.chessboard.get(to).getX(),board.chessboard.get(to).getY());
 
@@ -166,12 +168,6 @@ public abstract class  GameMode {
                 board.chessboard.get(to).piece = piece;
                 board.chessboard.get(to).setOccupied(true);
 
-
-                piece.setLocation(board.chessboard.get(to).getX(),board.chessboard.get(to).getY());
-                board.chessboard.get(primarySquare).piece=null;
-                board.chessboard.get(primarySquare).setOccupied(false);
-                board.chessboard.get(to).piece = piece;
-                board.chessboard.get(to).setOccupied(true);
 
             }
             System.out.println("CHESSBOARD AT SECOND POSSITION");

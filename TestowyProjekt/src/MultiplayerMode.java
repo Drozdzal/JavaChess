@@ -37,7 +37,7 @@ public class MultiplayerMode extends GameMode{
         System.out.println("Picking piece to"+to);
         Piece choosen_piece=Chessboard.chessboard.get(from).piece;
         opponentMove(choosen_piece, to);
-        System.out.println("Move executed");
+        System.out.println("RECEIVED OPPONEND MESSAGE" + message);
         waitingForOpponent=false;
 
 
