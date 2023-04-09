@@ -19,8 +19,18 @@ public class King extends Piece{
 
     @Override
     public void getPossibleMoves() {
-//        ArrayList<String> possible_moves = new ArrayList<String>();
-//        return possible_moves;
-        //
+        String possible_position="A2";
+        char column,row;
+        column=actual_position.charAt(0);
+        row=actual_position.charAt(1);
+        for (int i = -1; i <= 1; i += 1) {
+            for (int j = -1; j <= 1; j += 1) {
+                possible_position = "" + (char) ((int) (column) - i) + (char) (row - j);
+                if (!isSquareOccupiedByAlly(possible_position)) {
+                    allMoves.add(possible_position);
+                }
+            }
+        }
+
     }
 }

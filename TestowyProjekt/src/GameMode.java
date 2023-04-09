@@ -1,10 +1,9 @@
 import java.io.IOException;
 import java.io.SyncFailedException;
 
-public class  GameMode {
+public abstract class  GameMode {
 
-    protected Player activePlayer;
-    private boolean waitingForMessage=false;
+    public Player activePlayer;
 
 
     protected Client client;
@@ -15,30 +14,26 @@ public class  GameMode {
 
     Piece pieceToRemove = null;
     String currentChange;
+    boolean waitingForOpponent=false;
 
-    public GameMode()
-    {
-        System.out.println("Konstruktor Game Modelu");
-
-
-
-    }
-
+    String desiredSquare;
+    String previousSquare;
     public void gameStart()
     {
-        try {
-            System.out.println("Stworzono klienta");
-            client = new Client("localhost", 5555);
+        if (this instanceof MultiplayerMode) {
+            try {
+                System.out.println("Stworzono klienta");
+                client = new Client("localhost", 5555);
 
 
-        } catch (IOException error) {
-            System.out.println(error);
-            // code to handle the exception
-        }
-        if (!activePlayer.isWhite)
-        {
-            System.out.println("Zaczynam jako czarny wiec czekam");
-            switchTurn();
+            } catch (IOException error) {
+                System.out.println(error);
+                // code to handle the exception
+            }
+            if (!activePlayer.isWhite) {
+                System.out.println("Zaczynam jako czarny wiec czekam");
+                switchTurn();
+            }
         }
     }
 
@@ -75,6 +70,9 @@ public class  GameMode {
 
                 picked_piece = board.chessboard.get(primary_square).piece;
                 return picked_piece;
+
+            } else{
+                System.out.println("Its not your turn to pick piece or you picked opponent piece");
             }
 
         }
@@ -109,37 +107,27 @@ public class  GameMode {
     }
     boolean executeMove(Piece piece, int X,int Y){
 
-        String desiredSquare;
+
+        previousSquare=piece.actual_position;
         desiredSquare= "" + getColumn(X) + getRow(Y);
-        String previousSquare=piece.actual_position;
+
 
         piece.getPossibleMoves();
-        System.out.println(piece.allMoves);
-        System.out.println(desiredSquare);
-        if (piece.movePossible(desiredSquare))
+        System.out.println("All moves possible " +piece.allMoves);
+        System.out.println("Desired Squar e"+desiredSquare);
+        if (piece.movePossible(desiredSquare) && piece.isWhite==activePlayer.isWhite)
         {
             piece.firstMove=false;
             if (board.chessboard.get(desiredSquare).occupied)
             {
                 boolean moveResult= attackPiece(piece,desiredSquare);
-                if (moveResult)
-                {
-//                    client.sendMessage(previousSquare+""+desiredSquare);
 
-
-                    switchTurn();
-                }
                 return moveResult;
             }
             else
             {
                 boolean moveResult= movePiece(piece,desiredSquare);
-                if (moveResult)
-                {
-//                    client.sendMessage(previousSquare+""+desiredSquare);
 
-                    switchTurn();
-                }
                 return moveResult;
             }
         }
@@ -151,25 +139,20 @@ public class  GameMode {
 
     void opponentMove(Piece piece, String to){
 
-//        piece.getPossibleMoves();
+        piece.getPossibleMoves();
         System.out.println("RECEIVED piece WHICH WAS ON"+piece.actual_position);
         System.out.println("Figura moze sie poruszac do:");
-//        System.out.println(piece.allMoves);
-//        System.out.println(to);
         String primarySquare = piece.actual_position;
 
 
-        //TODO: TUTAJ SIE PRZYJRZEC BO PROBLEM Z MATEM
-//        if (piece.movePossible(to))
-//        {
+
 
             if (board.chessboard.get(to).occupied)
             {
                 piece.setLocation(board.chessboard.get(to).getX(),board.chessboard.get(to).getY());
+
                 pieceToRemove = board.chessboard.get(to).piece;
-                Piece.all_pieces.remove(board.chessboard.get(to).piece);
-                board.chessboard.get(to).piece = null;
-                board.chessboard.get(primarySquare).piece=null;
+                board.chessboard.get(primarySquare).piece = null;
                 board.chessboard.get(primarySquare).setOccupied(false);
                 board.chessboard.get(to).piece = piece;
                 board.chessboard.get(to).setOccupied(true);
@@ -177,6 +160,13 @@ public class  GameMode {
             }
             else
             {
+                piece.setLocation(board.chessboard.get(to).getX(),board.chessboard.get(to).getY());
+                board.chessboard.get(primarySquare).piece=null;
+                board.chessboard.get(primarySquare).setOccupied(false);
+                board.chessboard.get(to).piece = piece;
+                board.chessboard.get(to).setOccupied(true);
+
+
                 piece.setLocation(board.chessboard.get(to).getX(),board.chessboard.get(to).getY());
                 board.chessboard.get(primarySquare).piece=null;
                 board.chessboard.get(primarySquare).setOccupied(false);
@@ -200,13 +190,16 @@ public class  GameMode {
             piece.setLocation(board.chessboard.get(to).getX(),board.chessboard.get(to).getY());
 
             pieceToRemove = board.chessboard.get(to).piece;
-            board.chessboard.get(to).piece = null;
-            Piece.all_pieces.remove(board.chessboard.get(to).piece);
+//            Piece.all_pieces.remove(pieceToRemove);
             board.chessboard.get(primarySquare).piece = null;
             board.chessboard.get(primarySquare).setOccupied(false);
             board.chessboard.get(to).piece = piece;
             board.chessboard.get(to).setOccupied(true);
             return true;
+        }
+        else{
+            piece.actual_position=primarySquare;
+
         }
         System.out.println("MATEEEEE");
         return false;
@@ -225,24 +218,14 @@ public class  GameMode {
         board.chessboard.get(to).setOccupied(true);
             return true;
         }
+        else{
+            piece.actual_position=primarySquare;
+        }
         System.out.println("MATEEEEE");
         return false;
-
-
-
     }
-    void switchTurn()
-    {
-//        System.out.println("Waiting for oponent move");
-//        String message=client.waitForMessage();
-//        String from="" + message.charAt(0) + message.charAt(1);
-//        System.out.println("Picking piece from"+from);
-//        String to="" + message.charAt(2) + message.charAt(3);
-//        System.out.println("Picking piece to"+to);
-//        Piece choosen_piece=Chessboard.chessboard.get(from).piece;
-//        opponentMove(choosen_piece, to);
-//        System.out.println("Move executed");
-        activePlayer.isWhite=!activePlayer.isWhite;
-    }
+
+    public abstract void switchTurn();
+
 }
 

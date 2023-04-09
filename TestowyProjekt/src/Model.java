@@ -7,11 +7,10 @@ public class Model
     public Model()
     {
         System.out.println("Konstruktor Modelu");
-        gameMode = new GameMode();
+//        gameMode = new GameMode();
         board = new Chessboard();
         board.createBoard();
         board.createPieces();
-        gameMode.setChessboard(board);
     }
     private int value;
 

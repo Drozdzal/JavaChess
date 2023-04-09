@@ -13,10 +13,8 @@ public class ChessController implements MouseListener,MouseMotionListener,Action
     private Server server;
 //    private Chessboard board;
     private Piece picked_piece;
-//    private GameMode gameMode;
     private boolean isWhite=true;
 
-    private Client client;
 
 //    private Mouse mouse;
 
@@ -24,8 +22,11 @@ public class ChessController implements MouseListener,MouseMotionListener,Action
 
         this.model = model;
         this.view = view;
+        view.multiplayerServerButton.addActionListener(this);
+        view.joinMultiplayerButton.addActionListener(this);
         view.singleplayerButton.addActionListener(this);
-        view.multiplayerButton.addActionListener(this);
+        view.exitButton.addActionListener(this);
+
         view.addMouseListener(this);
         view.addMouseMotionListener(this);
         view.displayMainMenu();
@@ -35,7 +36,7 @@ public class ChessController implements MouseListener,MouseMotionListener,Action
     public void actionPerformed(ActionEvent e) {
         System.out.println("ACctionPerformed");
 
-        if (e.getSource() == view.singleplayerButton) {
+        if (e.getSource() == view.multiplayerServerButton) {
             System.out.println("nacisnieto singleplayer");
             view.mainPanel.setVisible(false);
             view.setLayout(null);
@@ -44,7 +45,10 @@ public class ChessController implements MouseListener,MouseMotionListener,Action
             view.displayChessboard(model.board.chessboard);
             view.displayPieces(Piece.all_pieces);
             view.repaint();
+            model.gameMode=new MultiplayerMode();
+            model.gameMode.setChessboard(model.board);
             model.gameMode.setPlayer("Michal",true);
+
             try {
             server = new Server(5555);
             Thread serverThread = new Thread(server);
@@ -58,7 +62,8 @@ public class ChessController implements MouseListener,MouseMotionListener,Action
             model.gameMode.gameStart();
 
 
-        } else if (e.getSource() == view.multiplayerButton) {
+
+        } else if (e.getSource() == view.joinMultiplayerButton) {
             view.mainPanel.setVisible(false);
             view.setLayout(null);
             view.setPreferredSize(new Dimension(1000,1000));
@@ -66,12 +71,15 @@ public class ChessController implements MouseListener,MouseMotionListener,Action
             view.displayChessboard(model.board.chessboard);
             view.displayPieces(Piece.all_pieces);
             view.repaint();
+            model.gameMode=new MultiplayerMode();
+            model.gameMode.setChessboard(model.board);
             model.gameMode.setPlayer("Ewa",false);
             model.gameMode.gameStart();
 
 
         }
-        else if (e.getSource() == view.exitButton) {
+        else if (e.getSource() == view.singleplayerButton) {
+            System.out.println("Odpalono singla");
             view.mainPanel.setVisible(false);
             view.setLayout(null);
             view.setPreferredSize(new Dimension(1000,1000));
@@ -79,6 +87,8 @@ public class ChessController implements MouseListener,MouseMotionListener,Action
             view.displayChessboard(model.board.chessboard);
             view.displayPieces(Piece.all_pieces);
             view.repaint();
+            model.gameMode= new SingleplayerMode();
+            model.gameMode.setChessboard(model.board);
             model.gameMode.setPlayer("Ewa",false);
             model.gameMode.gameStart();
 
@@ -93,6 +103,9 @@ public class ChessController implements MouseListener,MouseMotionListener,Action
 
             picked_piece=model.gameMode.canPickPiece(e.getX(),e.getY());
         }
+        else{
+            picked_piece=null;
+        }
     }
 
     @Override
@@ -102,15 +115,30 @@ public class ChessController implements MouseListener,MouseMotionListener,Action
             if (model.gameMode.executeMove(picked_piece,e.getX(),e.getY()))
             {
                 System.out.println("Executed move");
+
+                if (model.gameMode instanceof MultiplayerMode) {
+                    System.out.println("Multilpayer Game sending message to opponent");
+                    model.gameMode.client.sendMessage(model.gameMode.previousSquare+""+model.gameMode.desiredSquare);
+                }
+                else {
+                    System.out.println("HA");
+                }
                 if (model.gameMode.pieceToRemove!=null)
                 {
-                    view.remove(model.gameMode.pieceToRemove);;
-//                    view.resetPieces();
+                    view.remove(model.gameMode.pieceToRemove);
+                    Piece.all_pieces.remove(model.gameMode.pieceToRemove);
                     model.gameMode.pieceToRemove=null;
+                    picked_piece=null;
                 }
+                model.gameMode.switchTurn();
             }
             else
             {
+                if (model.gameMode.pieceToRemove!=null) {
+                    view.remove(model.gameMode.pieceToRemove);
+                    Piece.all_pieces.remove(model.gameMode.pieceToRemove);
+                    model.gameMode.pieceToRemove=null;
+                }
                 backToStartingPosition();
                 System.out.println("Backed to begginig");
 
@@ -120,19 +148,27 @@ public class ChessController implements MouseListener,MouseMotionListener,Action
 
     @Override
     public void mouseDragged(MouseEvent e) {
-        if ((picked_piece!=null)) {
-            picked_piece.setLocation(e.getX(),e.getY());
+        if ((picked_piece != null)) {
+            picked_piece.setLocation(e.getX(), e.getY());
+
 
         }
-        else
-        {
-            System.out.println("nic nie ma");
-        }
+
     }
+
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        // nothing
+        if (model.gameMode.pieceToRemove == null) {
+            if (model.gameMode.pieceToRemove!=null) {
+                view.remove(model.gameMode.pieceToRemove);
+                Piece.all_pieces.remove(model.gameMode.pieceToRemove);
+                model.gameMode.pieceToRemove=null;
+            }
+
+
+        }
+
     }
 
     @Override

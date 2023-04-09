@@ -12,9 +12,10 @@ import java.util.Map;
 
 
 public class View extends JFrame{
-    public JButton multiplayerButton;
-    public JButton singleplayerButton;
+    public JButton joinMultiplayerButton;
+    public JButton multiplayerServerButton;
     public JButton exitButton;
+    public JButton singleplayerButton;
 
 
     public Singleplayer singleplayer = new Singleplayer();
@@ -23,15 +24,19 @@ public class View extends JFrame{
 
 
 
-        mainPanel = new JPanel(new GridLayout(3, 1));
-        singleplayerButton = new JButton("Create Multilpayer Game");
-        multiplayerButton = new JButton("Join Multiplayer Game");
-        exitButton = new JButton("Join Multiplayer Game");
+        mainPanel = new JPanel(new GridLayout(4, 1));
+        singleplayerButton = new JButton("Singleplayer Game");
 
-//        exitButton = new JButton("Quit");
+        multiplayerServerButton = new JButton("Create Multilpayer Game");
+        joinMultiplayerButton = new JButton("Join Multiplayer Game");
+
+        exitButton = new JButton("Exit");
+
         mainPanel.add(singleplayerButton);
-        mainPanel.add(multiplayerButton);
+        mainPanel.add(multiplayerServerButton);
+        mainPanel.add(joinMultiplayerButton);
         mainPanel.add(exitButton);
+
 
         JPanel centerPanel = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
@@ -87,10 +92,8 @@ public class View extends JFrame{
 
     public void resetPieces()
     {
-        for (int i = 0; i < Piece.all_pieces.size(); i++) {
-            Piece singlePiece = Piece.all_pieces.get(i);
-            this.remove(singlePiece);
-        }
+        this.removeAll();
+        this.displayChessboard(Chessboard.chessboard);
         for (int i = 0; i < Piece.all_pieces.size(); i++) {
             Piece singlePiece = Piece.all_pieces.get(i);
             Square square = Chessboard.chessboard.get(singlePiece.actual_position);

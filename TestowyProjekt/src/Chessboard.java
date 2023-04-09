@@ -47,7 +47,6 @@ public class Chessboard {
         for(int i=1;i<=8;i++)
         {
             Pawn czarny_pionek = new Pawn(false);
-            System.out.println(""+(char)(64+i)+2);
             setPieceOnSquare(""+(char)(64+i)+2,czarny_pionek);
             Pawn bialy_pionek = new Pawn(true);
             setPieceOnSquare(""+(char)(64+i)+7,bialy_pionek);

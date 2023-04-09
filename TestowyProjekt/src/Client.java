@@ -15,36 +15,20 @@ public class Client {
         out = new PrintWriter(socket.getOutputStream(), true);
     }
 
-//    public void start() {
-//        Thread thread = new Thread(() -> {
-//            try {
-//                while (true) {
-//                    String message = in.readLine();
-//                    if (message == null) {
-//                        break;
-//                    }
-//                    System.out.println(message);
-//                }
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//        });
-//        thread.start();
-//    }
-//
+
     public void sendMessage(String message) {
         out.println(message);
     }
     public String waitForMessage() {
         try {
-            while (true) {
+//            while (true) {
                 String message = in.readLine();
-                if (message == null) {
-                    break;
-                }
+//                if (message == null) {
+//                    break;
+//                }
                 System.out.println("RECEIVED MESSAGE FROM OPPONENT"+message);
                 return message;
-            }
+//            }
         } catch (IOException e) {
             e.printStackTrace();
         }
