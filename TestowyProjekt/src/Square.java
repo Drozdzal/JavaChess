@@ -1,16 +1,13 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
 
 //public class Square extends JLabel implements MouseListener{
 public class Square extends JLabel{
-    int X;
-    int Y;
-    int width = 75;
-    int height = 75;
-    boolean occupied = false;
+    private int X;
+    private int Y;
+    private int width = 75;
+    private int height = 75;
+    private boolean occupied = false;
     String id;
     Piece piece;
     public void setOccupied(boolean occupied)
@@ -19,11 +16,11 @@ public class Square extends JLabel{
     }
 
     Square(boolean isWhite, int xp, int yp) {
-        this.X=xp;
-        this.Y=yp;
+        this.setX(xp);
+        this.setY(yp);
 
-        this.setBounds(X, Y, width, height);
-        this.setPreferredSize(new Dimension(width,height));
+        this.setBounds(getX(), getY(), getWidth(), getHeight());
+        this.setPreferredSize(new Dimension(getWidth(), getHeight()));
         if (isWhite) {
             this.setBackground(Color.GRAY);
         }
@@ -45,7 +42,43 @@ public class Square extends JLabel{
     }
 
 
+    @Override
+    public int getWidth() {
+        return width;
+    }
 
+    public void setWidth(int width) {
+        this.width = width;
+    }
 
+    @Override
+    public int getHeight() {
+        return height;
+    }
 
+    public void setHeight(int height) {
+        this.height = height;
+    }
+
+    public boolean isOccupied() {
+        return occupied;
+    }
+
+    @Override
+    public int getY() {
+        return Y;
+    }
+
+    public void setY(int y) {
+        Y = y;
+    }
+
+    @Override
+    public int getX() {
+        return X;
+    }
+
+    public void setX(int x) {
+        X = x;
+    }
 }

@@ -6,13 +6,13 @@ public class MultiplayerMode extends GameMode{
         Piece picked_piece;
         //gdy pole które nacisnelismy okupuje figura
         System.out.println("Picking piece in Multiplayer");
-        if (!waitingForOpponent) {
-            if (board.chessboard.get(primary_square).occupied) {
+        if (!isWaitingForOpponent()) {
+            if (getBoard().chessboard.get(primary_square).isOccupied()) {
                 // jesli figure chce podniesc gracz do ktorego figura nalezy
-                if (activePlayer.isWhite == board.chessboard.get(primary_square).piece.isWhite) {
+                if (activePlayer.isWhite() == getBoard().chessboard.get(primary_square).piece.isWhite()) {
                     //jesli nie ma mata
 
-                    picked_piece = board.chessboard.get(primary_square).piece;
+                    picked_piece = getBoard().chessboard.get(primary_square).piece;
                     return picked_piece;
 
                 } else {
@@ -27,7 +27,7 @@ public class MultiplayerMode extends GameMode{
     @Override
     public void switchTurn()
     {
-        waitingForOpponent=true;
+        setWaitingForOpponent(true);
 
         System.out.println("Waiting for oponent move");
         String message=client.waitForMessage();
@@ -38,7 +38,7 @@ public class MultiplayerMode extends GameMode{
         Piece choosen_piece=Chessboard.chessboard.get(from).piece;
         opponentMove(choosen_piece, to);
         System.out.println("RECEIVED OPPONEND MESSAGE" + message);
-        waitingForOpponent=false;
+        setWaitingForOpponent(false);
 
 
     }

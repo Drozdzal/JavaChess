@@ -1,6 +1,5 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
 import java.util.HashMap;
 import java.util.ArrayList;
 import java.util.Map;
@@ -12,10 +11,10 @@ import java.util.Map;
 
 
 public class View extends JFrame{
-    public JButton joinMultiplayerButton;
-    public JButton multiplayerServerButton;
-    public JButton exitButton;
-    public JButton singleplayerButton;
+    private JButton joinMultiplayerButton;
+    private JButton multiplayerServerButton;
+    private JButton exitButton;
+    private JButton singleplayerButton;
 
 
     public Singleplayer singleplayer = new Singleplayer();
@@ -25,17 +24,17 @@ public class View extends JFrame{
 
 
         mainPanel = new JPanel(new GridLayout(4, 1));
-        singleplayerButton = new JButton("Singleplayer Game");
+        setSingleplayerButton(new JButton("Singleplayer Game"));
 
-        multiplayerServerButton = new JButton("Create Multilpayer Game");
-        joinMultiplayerButton = new JButton("Join Multiplayer Game");
+        setMultiplayerServerButton(new JButton("Create Multilpayer Game"));
+        setJoinMultiplayerButton(new JButton("Join Multiplayer Game"));
 
-        exitButton = new JButton("Exit");
+        setExitButton(new JButton("Exit"));
 
-        mainPanel.add(singleplayerButton);
-        mainPanel.add(multiplayerServerButton);
-        mainPanel.add(joinMultiplayerButton);
-        mainPanel.add(exitButton);
+        mainPanel.add(getSingleplayerButton());
+        mainPanel.add(getMultiplayerServerButton());
+        mainPanel.add(getJoinMultiplayerButton());
+        mainPanel.add(getExitButton());
 
 
         JPanel centerPanel = new JPanel(new GridBagLayout());
@@ -58,6 +57,37 @@ public class View extends JFrame{
 
     }
 
+    public JButton getJoinMultiplayerButton() {
+        return joinMultiplayerButton;
+    }
+
+    public void setJoinMultiplayerButton(JButton joinMultiplayerButton) {
+        this.joinMultiplayerButton = joinMultiplayerButton;
+    }
+
+    public JButton getMultiplayerServerButton() {
+        return multiplayerServerButton;
+    }
+
+    public void setMultiplayerServerButton(JButton multiplayerServerButton) {
+        this.multiplayerServerButton = multiplayerServerButton;
+    }
+
+    public JButton getExitButton() {
+        return exitButton;
+    }
+
+    public void setExitButton(JButton exitButton) {
+        this.exitButton = exitButton;
+    }
+
+    public JButton getSingleplayerButton() {
+        return singleplayerButton;
+    }
+
+    public void setSingleplayerButton(JButton singleplayerButton) {
+        this.singleplayerButton = singleplayerButton;
+    }
 
 
     private class Multiplayer extends JPanel {
@@ -83,8 +113,8 @@ public class View extends JFrame{
     {
         for (int i = 0; i < all_pieces.size(); i++) {
             Piece singlePiece = all_pieces.get(i);
-            Square square = Chessboard.chessboard.get(singlePiece.actual_position);
-            singlePiece.setBounds(square.X,square.Y,75,75);
+            Square square = Chessboard.chessboard.get(singlePiece.getActual_position());
+            singlePiece.setBounds(square.getX(), square.getY(),75,75);
 
             this.add(singlePiece,0);
         }
@@ -96,8 +126,8 @@ public class View extends JFrame{
         this.displayChessboard(Chessboard.chessboard);
         for (int i = 0; i < Piece.all_pieces.size(); i++) {
             Piece singlePiece = Piece.all_pieces.get(i);
-            Square square = Chessboard.chessboard.get(singlePiece.actual_position);
-            singlePiece.setBounds(square.X,square.Y,75,75);
+            Square square = Chessboard.chessboard.get(singlePiece.getActual_position());
+            singlePiece.setBounds(square.getX(), square.getY(),75,75);
 
             this.add(singlePiece,0);
         }

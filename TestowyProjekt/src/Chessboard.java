@@ -31,13 +31,13 @@ public class Chessboard {
     void setPieceOnSquare(String position, Piece piece)
     {
         int x,y;
-        x=chessboard.get(position).X;
-        y=chessboard.get(position).Y;
+        x= chessboard.get(position).getX();
+        y= chessboard.get(position).getY();
 
         piece.setOnBoard(x,y);
-        piece.actual_position=position;
+        piece.setActual_position(position);
         chessboard.get(position).piece=piece;
-        chessboard.get(position).occupied=true;
+        chessboard.get(position).setOccupied(true);
     }
 
 

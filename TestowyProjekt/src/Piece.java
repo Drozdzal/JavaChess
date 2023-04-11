@@ -1,27 +1,15 @@
 import javax.swing.*;
 
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
 import java.util.ArrayList;
-
-
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
 
 public abstract class Piece extends JLabel{
 
-    boolean isWhite;
-    boolean firstMove=true;
-    String file_path;
-    ImageIcon pieceVisualization;
-    String actual_position;
-    ArrayList<String> allMoves = new ArrayList<String>();
-
-
+    private boolean isWhite;
+    private boolean firstMove=true;
+    private String file_path;
+    private ImageIcon pieceVisualization;
+    private String actual_position;
+    private ArrayList<String> allMoves = new ArrayList<String>();
     public static ArrayList<Piece> all_pieces = new ArrayList<Piece>();
 //
     Piece() {
@@ -36,10 +24,10 @@ public abstract class Piece extends JLabel{
     public abstract void getPossibleMoves();
 
     boolean movePossible(String desiredSquare) {
-        if (allMoves.size() < 1) {
+        if (getAllMoves().size() < 1) {
             getPossibleMoves();
         }
-        if (allMoves.contains(desiredSquare)) {
+        if (getAllMoves().contains(desiredSquare)) {
             return true;
         } else {
 
@@ -50,7 +38,7 @@ public abstract class Piece extends JLabel{
     {
         int pieces_through = 0;
         while (Piece.all_pieces.size() > pieces_through) {
-            if(possible_position.equals(all_pieces.get(pieces_through).actual_position))
+            if(possible_position.equals(all_pieces.get(pieces_through).getActual_position()))
             {
                 return true;
             }
@@ -65,9 +53,9 @@ public abstract class Piece extends JLabel{
     {
         int pieces_through = 0;
         while (Piece.all_pieces.size() > pieces_through) {
-            if(possible_position.equals(all_pieces.get(pieces_through).actual_position))
+            if(possible_position.equals(all_pieces.get(pieces_through).getActual_position()))
             {
-                if(all_pieces.get(pieces_through).isWhite==this.isWhite) {
+                if(all_pieces.get(pieces_through).isWhite() == this.isWhite()) {
                     return true;
                 }
                 else {
@@ -82,6 +70,51 @@ public abstract class Piece extends JLabel{
     }
 
 
+    public boolean isWhite() {
+        return isWhite;
+    }
 
+    public void setWhite(boolean white) {
+        isWhite = white;
+    }
 
+    public boolean isFirstMove() {
+        return firstMove;
+    }
+
+    public void setFirstMove(boolean firstMove) {
+        this.firstMove = firstMove;
+    }
+
+    public String getFile_path() {
+        return file_path;
+    }
+
+    public void setFile_path(String file_path) {
+        this.file_path = file_path;
+    }
+
+    public ImageIcon getPieceVisualization() {
+        return pieceVisualization;
+    }
+
+    public void setPieceVisualization(ImageIcon pieceVisualization) {
+        this.pieceVisualization = pieceVisualization;
+    }
+
+    public String getActual_position() {
+        return actual_position;
+    }
+
+    public void setActual_position(String actual_position) {
+        this.actual_position = actual_position;
+    }
+
+    public ArrayList<String> getAllMoves() {
+        return allMoves;
+    }
+
+    public void setAllMoves(ArrayList<String> allMoves) {
+        this.allMoves = allMoves;
+    }
 }
